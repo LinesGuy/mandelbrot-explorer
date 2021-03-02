@@ -1,7 +1,8 @@
 import pygame
+import time
 
-width, height = 100, 100  # RESOLUTION OF FRACTAL BEFORE SCALING
-scale = 5
+width, height = 64, 64  # RESOLUTION OF FRACTAL BEFORE SCALING
+scale = 8
 s_width, s_height = scale*width, scale*height  # SCREEN SIZE
 
 speed = 0.1  # Zoom / movement speed
@@ -22,7 +23,7 @@ frame = 0
 
 while running:
     frame += 1
-    print(frame)
+    #print(frame)
 
     events = pygame.event.get()
     for event in events:
@@ -41,11 +42,19 @@ while running:
     if keys[pygame.K_d]:
         width += 1
         height += 1
+    if width < 2:
+        width = 2
+    if height < 2:
+        height = 2
+
 
     if keys[pygame.K_w]:
         iter_num += 1
     if keys[pygame.K_s]:
         iter_num -= 1
+    
+    if iter_num < 1:
+        iter_num = 1
 
     if keys[pygame.K_q] or mouse_right:  # zoom out
         mx1 = mx1 + (fx - mx1) * -speed
@@ -60,26 +69,28 @@ while running:
         my2 = my2 + (fy - my2) * speed
         zoom *= (1 + speed) ** 2
 
+
     # The juicy stuff
     img = pygame.Surface((width, height))
+    for py in range(height):
+        for px in range(width):
+            x0 = (px / width) * (mx2 - mx1) + mx1
+            y0 = (py / height) * (my2 - my1) + my1
+            x = 0
+            y = 0
+            iters = 0
 
-    for y in range(height):
-        for x in range(width):
-            sx = (x / width) * (mx2 - mx1) + mx1
-            sy = (y / height) * (my2 - my1) + my1
-            c = complex(sx, sy)
-            z = complex(0, 0)
-            for i in range(iter_num):  # Iterate loop
-                z = z*z + c  #  z^2 + c
-                if abs(z) > 2:  # If distance from origin > 2 then diverged
-                    # Diverged, colour based on iterations
-                    color = 255 - int(255 * (i / iter_num) * 0.5)
-                    img.set_at((x, y), (color,color,color))
-                    break
-            if i == iter_num - 1:
-                # ^ if still converged after iter_num many iterations,
-                # make pixel black
-                img.set_at((x, y), (0, 0, 0))
+            x2 = 0
+            y2 = 0
+            while (x2 + y2 <= 4 and iters < iter_num):
+                y = 2 * x * y + y0
+                x = x2 - y2 + x0
+                x2 = x * x
+                y2 = y * y
+                iters += 1
+
+            color = 255 - int(255 * (iters / iter_num))
+            img.set_at((px, py), (color,color,color))
 
     # Scale and blit
     img = pygame.transform.scale(img, (s_width, s_height)) 
