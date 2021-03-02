@@ -18,12 +18,7 @@ running = True
 
 iter_num = 30
 
-frame = 0
-
 while running:
-    frame += 1
-    print(frame)
-
     events = pygame.event.get()
     for event in events:
         if event.type == pygame.QUIT:
@@ -40,7 +35,7 @@ while running:
     if keys[pygame.K_d]:
         width += 1
         height += 1
-        
+
     if keys[pygame.K_w]:
         iter_num += 1
     if keys[pygame.K_s]:
@@ -71,16 +66,16 @@ while running:
                 z = z*z + c  #  z^2 + c
                 if abs(z) > 2:  # If distance from origin > 2 then diverged
                     # Diverged, colour based on iterations
-                    color = int(255 * (i / iter_num))
+                    color = 255 - int(255 * (i / iter_num) * 0.5)
                     img.set_at((x, y), (color,color,color))
                     break
             if i == iter_num - 1:
                 # ^ if still converged after iter_num many iterations,
-                # make pixel white
-                img.set_at((x, y), (255,255,255))
+                # make pixel black
+                img.set_at((x, y), (0, 0, 0))
 
     # Scale and blit
-    img = pygame.transform.scale(img, (s_width, s_height))    
+    img = pygame.transform.scale(img, (s_width, s_height)) 
     screen.blit(img, (0, 0))
     pygame.display.update()            
 
