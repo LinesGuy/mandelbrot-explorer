@@ -35,17 +35,17 @@ while running:
     fx, fy = mx1 + (mx2 - mx1) * tx, my1 + (my2 - my1) * ty
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
-        mx1 -= speed / zoom
-        mx2 -= speed / zoom
+        width -= 1
+        height -= 1
     if keys[pygame.K_d]:
-        mx1 += speed / zoom
-        mx2 += speed / zoom
+        width += 1
+        height += 1
+        
     if keys[pygame.K_w]:
-        my1 -= speed / zoom
-        my2 -= speed / zoom
+        iter_num += 1
     if keys[pygame.K_s]:
-        my1 += speed / zoom
-        my2 += speed / zoom
+        iter_num -= 1
+
     if keys[pygame.K_q]:  # zoom out
         mx1 = mx1 + (fx - mx1) * -speed
         mx2 = mx2 + (fx - mx2) * -speed
