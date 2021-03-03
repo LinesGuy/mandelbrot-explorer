@@ -2,7 +2,9 @@
 pygame mandelbrot explorer
 
 Controls:
-E zooms in, Q zooms out (based on mouse position)
+
+Left click zooms in on mouse position, Right click zooms out
+Q decreases power, E increases power
 W increases iter_num, S decreases it
 D increases fractal render resolution, A decreases it
 
